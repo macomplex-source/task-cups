@@ -41,14 +41,31 @@ let longPressDuration = 500; // ms
 let tappedParticle = null;
 
 // --- Main Tasks ---
+// --- Subtle Momentum-Building Main Tasks (Only one Start:*high stress*) ---
 let mainTasks = [
+  {
+    title: "Successful Workday at Trampoline Park",
+    deadline: "2025-10-04T18:00:00",
+    subtasks: [
+      "Start: Check over party schedules and confirm bookings*high stress*",
+      "Print out any sheets/forms needed for parties",
+      "Address any employee lateness calmly but firmly",
+      "Observe arrival times of employees discreetly",
+      "Group employees at regular intervals to ensure smooth flow",
+      "Prepare TV edits and have them ready for later",
+      "Find and print out any forms the boss might need",
+      "Assist wherever small gaps appear without creating new chaos",
+      "Do a quick check of supplies and safety measures",
+      "Reflect at end of day: Did the park operate smoothly and profit goal met?"
+    ]
+  },
+
   {
     title: "Clean Up Life From The Room to The Fire",
     deadline: "2025-09-02T18:00:00",
     subtasks: [
       "Go to Facebook and find form information",
       "Figure out what to do next",
-      "Submit to office",
       "Monologue",
       "Second monologue",
       "Build Baseline",
@@ -67,8 +84,7 @@ let mainTasks = [
       "Design card",
       "Print batch",
       "Post on social media",
-      "Start*high stress*",
-      "mock up a penciled design"
+      "Start Mock Up A Penciled Design"
     ]
   },
 
@@ -87,37 +103,124 @@ let mainTasks = [
     ]
   },
 
-  // --- New placeholder tasks ---
   {
-    title: "Fatten up Seiji",
-    deadline: "2025-09-03T10:00:00",
+    title: "Fatten up 盛時",
+    deadline: "2025-09-30T23:59:59",
     subtasks: [
-	       "check his weight",
-               "Plan out bag weight and time period of consumption",
-               "Use cage as eating grounds",
-	       "Massage his stomach before food",
-               "First Solid Meal Today",
-               "Second Solid Meal Today",
-               "Take Me For a Walk*high stress*",
-	       "Clean His Cage"
-	       ]
+      "Bring cash and wall down the road",
+      "Walk to the Tim Hortons nearby",
+      "Go to the bank beside the Tim Hortons and deposit cash",
+      "Pick up some dog treats while there",
+      "Walk back along the park path to get 盛時 some fresh air",
+      "Prepare 盛時’s food while humming a tune",
+      "Feed 盛時 his first meal",
+      "Wash the dishes used for 盛時’s meal",
+      "Take 盛時 out for a 10-minute walk to digest",
+      "Reflect briefly on the day’s wins before logging the meal"
+    ]
   },
+
   {
     title: "Purchase Automatic 2008 Hyundai Tiburon",
     deadline: "2025-09-03T12:00:00",
     subtasks: [
-	       "Withdraw $4,000",
-	       "Wait for Aerosports Paycheck to come in",
-	       "Visit RBC bank",
-	       "Plan how to get to Toronto as cheap as possible"
-               ]
+      "Withdraw $4,000",
+      "Wait for Aerosports Paycheck to arrive",
+      "Visit RBC bank for confirmation",
+      "Plan how to get to Toronto cheaply",
+      "Check listings and set alerts for Hyundai Tiburon",
+      "Confirm travel route for pickup",
+      "Review the car condition checklist",
+      "Execute purchase plan carefully"
+    ]
   },
+
   {
-    title: "Placeholder Task 3",
+    title: "Make Staircase for 盛時 out the Window",
     deadline: "2025-09-03T14:00:00",
-    subtasks: []
+    subtasks: [
+      "Sketch initial staircase design",
+      "Do measurements of window height",
+      "Measure floor and landing area",
+      "Cut first piece of wood or cardboard for test",
+      "Assemble prototype frame loosely",
+      "Test stability by weight or small object",
+      "Refine design based on test",
+      "Finalize structure ready for installation"
+    ]
+  },
+
+  {
+    title: "Fireman Discipline",
+    deadline: "2025-09-04T06:00:00",
+    subtasks: [
+      "Wake up at 6am sharp",
+      "Morning run with 盛時 along familiar route",
+      "Take cold shower while counting breaths",
+      "Carry weight pack for 20 minutes",
+      "Log completion of morning routine",
+      "Reflect on how this builds readiness"
+    ]
+  },
+
+  {
+    title: "Boxer’s Daily Routine",
+    deadline: "2025-09-04T20:00:00",
+    subtasks: [
+      "Shadowbox 3 rounds",
+      "Bag work 5 rounds",
+      "Core workout: 3 exercises",
+      "Stretch + cool down",
+      "Record progress in journal",
+      "Visualize winning next bout"
+    ]
+  },
+
+  {
+    title: "Strengthen Family Connection",
+    deadline: "2025-09-04T21:00:00",
+    subtasks: [
+      "Call Mom",
+      "Text sibling one small message",
+      "Plan visit for later this week",
+      "Share one positive update verbally",
+      "Write down any reflections on family connection"
+    ]
+  },
+
+  {
+    title: "Hit $200/day Consistency",
+    deadline: "2025-09-05T18:00:00",
+    subtasks: [
+      "Morning job secured",
+      "Afternoon job secured",
+      "Submit hours / invoices",
+      "Track total for the day",
+      "Reflect: Did I cross $200?",
+      "Plan adjustments for next day"
+    ]
+  },
+
+  {
+    title: "Design Keyboard-Like Car Transmission",
+    deadline: "2025-10-10T18:00:00",
+    subtasks: [
+      "Sketch a random keyboard layout on scrap paper",
+      "Map letters to simple forward/back motions",
+      "Think about hand positioning translating to gear shifts",
+      "Draft small prototype with cardboard or Lego",
+      "Test mock-up using hand motions only",
+      "Refine design to reduce finger movement fatigue",
+      "Consult technical diagrams of car transmission",
+      "Update prototype with feasibility tweaks",
+      "Test virtual simulation if possible",
+      "Document design for review"
+    ]
   }
 ];
+
+
+
 
 
 // --- Load / Save ---
