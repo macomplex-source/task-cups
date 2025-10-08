@@ -212,7 +212,7 @@ class Particle {
         for(let other of this.cup.particles){
           if(other === this || other.completed) continue;
 
-          let myRadius = this.visualSize*0.75; // increased radius
+          let myRadius = this.visualSize*0.75;
           let otherRadius = other.visualSize*0.5;
           let minDist = myRadius + otherRadius + 2;
           let d = dist(this.pos.x,this.pos.y,other.pos.x,other.pos.y);
@@ -227,6 +227,13 @@ class Particle {
             let dir = p5.Vector.sub(other.pos,this.pos).normalize();
             other.pos.add(dir.copy().mult((overlap*0.75+0.5)*stressFactor*speedMultiplier));
             other.vel.add(dir.copy().mult((2.5+overlap*0.2)*stressFactor*speedMultiplier));
+          }
+
+          // gradual slowdown to default speed
+          if(this.completed){
+            let defaultSpeed = 1.2; // original max velocity
+            other.vel.x = lerp(other.vel.x, constrain(other.vel.x, -defaultSpeed, defaultSpeed), 0.05);
+            other.vel.y = lerp(other.vel.y, constrain(other.vel.y, -defaultSpeed, defaultSpeed), 0.05);
           }
         }
       }
