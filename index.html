@@ -451,7 +451,18 @@ function mousePressed(){
       if(dist(mouseX,mouseY,p.pos.x,p.pos.y)<p.touchSize/2){ p.completed=true; saveCompletedState(); }
     }
   }
+}function touchStarted() {
+  for (let cup of cups) {
+    for (let p of cup.particles) {
+      if (dist(touches[0].x, touches[0].y, p.pos.x, p.pos.y) < 6) {
+        p.completed = true;
+      }
+    }
+  }
+  // Prevent default scroll behavior when touching the canvas
+  return false;
 }
+
 function mousePressedRight(e){
   e.preventDefault();
   for(let cup of cups){
