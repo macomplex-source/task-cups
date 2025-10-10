@@ -5,10 +5,34 @@
 <title>Task Cups Prototype - Pollution Urgency</title>
 <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
 <style>
-  body { margin: 0; background: #000; color: #fff; font-family: sans-serif; }
-  #checklist { position: fixed; top: -30px; left: 10px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; display: none; }
+  body { 
+    margin: 0; 
+    background: #000; 
+    color: #fff; 
+    font-family: sans-serif; 
+    touch-action: none;          /* Safari touch fix */
+    -webkit-user-select: none;    /* Disable text selection */
+    -webkit-touch-callout: none;  /* Disable long press menu */
+  }
+  canvas { touch-action: none; } /* Ensure canvas receives touches */
+  #checklist { 
+    position: fixed; 
+    top: -30px; 
+    left: 10px; 
+    background: rgba(0,0,0,0.7); 
+    padding: 10px; 
+    border-radius: 5px; 
+    display: none; 
+  }
   #toggleTextBtn, #toggleMobileBtn, #toggleSubtaskBtn {
-    position: fixed; top: 10px; padding: 10px; background: #222; color: #fff; border: none; border-radius: 5px; cursor: pointer;
+    position: fixed; 
+    top: 10px; 
+    padding: 10px; 
+    background: #222; 
+    color: #fff; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer;
   }
   #toggleTextBtn { right: 10px; }
   #toggleMobileBtn { right: 200px; }
@@ -41,202 +65,38 @@ let longPressDuration = 500; // ms
 let tappedParticle = null;
 
 // --- Main Tasks ---
-let mainTasks = [
-  {
-    title: "Bike to St. Catharines",
-    deadline: "2025-10-08T23:59:59",
-    subtasks: [
-      "Wash Up",
-      "Prep 2 sets of clothes",
-      "Find Keys",
-      "Start: Find and charge phone*high stress*",
-      "Charge Headphones",
-      "Bike to St. Catharines",
-      "Check Job Route",
-      "Check Job Picture",
-      "Bike Ride Complete"
-    ]
-  },
-  {
-    title: "Pick Up Liam For Work",
-    deadline: "2025-10-08T23:59:59",
-    subtasks: [
-      "Start: Drop Bicycle Off At Home*high stress*",
-      "Drive To Liam's House",
-      "On The Way To Client's House By 9:35am",
-      "Send Hours to Fer"
-    ]
-  },
-  {
-    title: "Return Home Safely",
-    deadline: "2025-10-08T23:59:59",
-    subtasks: [
-      "Drop Liam Off",
-      "Drive To Liam's House",
-      "Start Returning Home By 11:25am*high stress*"
-    ]
-  },
-  {
-    title: "Do Car Related Work",
-    deadline: "2025-10-10T18:00:00",
-    subtasks: [
-      "Call Doctor",
-      "Start: Find Service Ontario e-mail*high stress*",
-      "Find Doctor's e-mail",
-      "Give Doctor a call by 3:35pm",
-      "Send e-mail from Service Ontario to Doctor",
-      "Follow Driver Medical Review Online Steps",
-      "Complete Driver Medical Review Online Steps"
-    ]
-  },
-  {
-    title: "Start Reviewing Marsh's Work and Develop Steps",
-    deadline: "2025-10-10T18:00:00",
-    subtasks: [
-      "Start: Open Google Drive, Gmail, and Remember Last Website*high stress*",
-      "Review the step by step breakdown",
-      "Grab your notebook from your bag in the white car",
-      "Lock your bicycle",
-      "Find the necessary resources starting with Calendar for successful calls",
-      "Look through documents and record names like gospel",
-      "Draft e-mails by 9:30pm"
-    ]
-  },
-  {
-    title: "Start Sorting Out Bell Issue",
-    deadline: "2025-10-10T18:00:00",
-    subtasks: [
-      "Start: Collecting and reconciling dates for 'missed' payments*high stress*",
-      "Review Bill and Gather Questions to Ask Bell",
-      "Call Bell"
-    ]
-  },
-  {
-    title: "Clean Car",
-    deadline: "2025-10-10T18:00:00",
-    subtasks: [
-      "Start: Remove any and all garbage*high stress*",
-      "Find a way to clean the seats that got wet yesterday",
-      "Find a way to give it a professional consistent clean smell",
-      "Inspect for any scratches"
-    ]
-  },
-  {
-   title: "Clean Room",
-    deadline: "2025-10-10T18:00:00",
-    subtasks: [
-      "Start: Clear Floor*high stress*",
-      "Clean Seiji's Bowl",
-      "Get Apple Cider Vinegar from kitchen and make fly trap",
-      "Start cleaning back tabletop"
-    ]
-  },
-{
-   title: "Walk The Dog",
-    deadline: "2025-10-10T18:00:00",
-    subtasks: [
-      "Start: Let Him Through The Window*high stress*"
-    ]
-  },
-  {
-   title: "Do CP Calls",
-    deadline: "2025-10-10T18:00:00",
-    subtasks: [
-      "Start: Open Client Tether*high stress*",
-      "Make First Call By 5pm",
-      "Do one runthrough of the client list"
-    ]
-  },
-  {
-    title: "Complete The Day",
-    deadline: "2025-10-08T23:59:59",
-    subtasks: [
-      "Start: Have an Energy Drink*high stress*",
-      "Record Money Earned Today",
-      "Earn $50 More Tonight",
-      "Start Writing Out On Paper Car Legalizing Process",
-      "Find Time To Spend On Removing The Warning Lights",
-      "Feel How Good Your Bicycle Breaks Are, Maybe Install More",
-      "Reflect on wins, investments, and storyline"
-    ]
-  },
-{
-    title: "Start The Day Strong",
-    deadline: "2025-10-10T23:59:59",
-    subtasks: [
-      "Start: Be and feel clean*high stress*",
-      "Walk the dog",
-      "Leave for Liam's at 8:30pm",
-      "Buy snacks",
-      "Remember to be focused, energized and distractions are trapped with you, not you with them"
-    ]
-  },
-];
+// (Keep your mainTasks array exactly as in your original code)
 
-// --- Load / Save ---
-function loadCompletedState(){ let saved = localStorage.getItem('completedParticles'); return saved ? JSON.parse(saved) : []; }
-function saveCompletedState(){ let completed = []; for(let cup of cups){ completed.push(cup.particles.map(p => p.completed)); } localStorage.setItem('completedParticles', JSON.stringify(completed)); }
+// --- Load / Save with Safari-safe localStorage ---
+function safeStorageAvailable() {
+  try {
+    localStorage.setItem("test", "1");
+    localStorage.removeItem("test");
+    return true;
+  } catch (e) {
+    console.warn("LocalStorage not available on this device");
+    return false;
+  }
+}
+let storageEnabled = safeStorageAvailable();
+
+function loadCompletedState() {
+  if (!storageEnabled) return [];
+  let saved = localStorage.getItem('completedParticles');
+  return saved ? JSON.parse(saved) : [];
+}
+
+function saveCompletedState() {
+  if (!storageEnabled) return;
+  let completed = [];
+  for(let cup of cups){
+    completed.push(cup.particles.map(p => p.completed));
+  }
+  localStorage.setItem('completedParticles', JSON.stringify(completed));
+}
 
 // --- Cup Class ---
-class Cup {
-  constructor(x, y, w, h, title, deadline, color){
-    this.pos = createVector(x, y);
-    this.w = w;
-    this.h = h;
-    this.title = title;
-    this.deadline = new Date(deadline);
-    this.color = color;
-    this.particles = [];
-    this.deadlineTotal = this.deadline - new Date();
-    this.currentTitleIndex = 0;  
-    this.titleFade = 0;             
-    this.titleDirection = 1;       
-    this.titleSpeed = 2;            
-  }
-  addParticle(name, completed=false, highStress=false){
-    let particle = new Particle(random(this.pos.x,this.pos.x+this.w), random(this.pos.y,this.pos.y+this.h), name, this, completed, highStress);
-    this.particles.push(particle);
-  }
-  update(){
-// --- Subtask title cycling (skip high-stress) ---
-if(showSubtaskTitles && this.particles.length > 0){
-  // gather only non-high-stress particles
-  let normalParticles = this.particles.filter(p => !p.highStress);
-  
-  if(normalParticles.length > 0){
-    let p = normalParticles[this.currentTitleIndex % normalParticles.length];
-
-    // update fade
-    this.titleFade += this.titleDirection * this.titleSpeed;
-    if(this.titleFade >= 255){
-      this.titleFade = 255;
-      this.titleDirection = -1; // start fading out
-    } else if(this.titleFade <= 0){
-      this.titleFade = 0;
-      this.titleDirection = 1; // next particle
-      this.currentTitleIndex = (this.currentTitleIndex + 1) % normalParticles.length;
-    }
-
-    // draw current title
-    fill(255, this.titleFade);
-    textAlign(CENTER);
-    textSize(16);
-    text(p.name, p.pos.x, p.pos.y - 25);
-  }
-}
-
-
-    for(let p of this.particles) p.update();
-
-    if(showCupText){
-      fill(255);
-      textAlign(CENTER);
-      textSize(windowWidth < 600 ? 18 : 14);
-      text(this.title, this.pos.x + this.w/2, this.pos.y - 10);
-      text("Deadline: " + this.deadline.toLocaleString(), this.pos.x + this.w/2, this.pos.y + this.h + 15);
-    }
-  }
-}
+class Cup { /* keep as is, your code unchanged */ }
 
 // --- Particle Class ---
 class Particle {
@@ -272,14 +132,13 @@ class Particle {
     if(this.pos.y < this.cup.pos.y){ this.pos.y = this.cup.pos.y; this.vel.y*=-1; }
     if(this.pos.y > this.cup.pos.y + this.cup.h){ this.pos.y = this.cup.pos.y + this.cup.h; this.vel.y*=-1; }
 
-    // urgency
+    // urgency and high-stress logic remains unchanged
     if(!this.completed){
       let now = new Date();
       let remaining = this.cup.deadline - now;
       let sourceUrgency = constrain(1 - remaining / this.cup.deadlineTotal, 0, 1);
       this.urgency += (sourceUrgency - this.urgency) * 0.02;
 
-      // spread urgency to nearby particles
       for(let other of this.cup.particles){
         if(!other.completed && other!==this && dist(this.pos.x,this.pos.y,other.pos.x,other.pos.y)<50){
           other.urgency += (this.urgency-other.urgency)*0.01;
@@ -287,17 +146,14 @@ class Particle {
         }
       }
 
-      // high-stress collisions
       if(this.highStress){
         let stressFactor = this.completed ? max(0, 1 - (millis()%1000)/1000) : 1;
         for(let other of this.cup.particles){
           if(other === this || other.completed) continue;
-
           let myRadius = this.visualSize*0.75;
           let otherRadius = other.visualSize*0.5;
           let minDist = myRadius + otherRadius + 2;
           let d = dist(this.pos.x,this.pos.y,other.pos.x,other.pos.y);
-
           let speedMultiplier = 0.05 * this.visualSize;
 
           if(d === 0){
@@ -310,9 +166,8 @@ class Particle {
             other.vel.add(dir.copy().mult((2.5+overlap*0.2)*stressFactor*speedMultiplier));
           }
 
-          // gradual slowdown to default speed
           if(this.completed){
-            let defaultSpeed = 1.2; // original max velocity
+            let defaultSpeed = 1.2;
             other.vel.x = lerp(other.vel.x, constrain(other.vel.x, -defaultSpeed, defaultSpeed), 0.05);
             other.vel.y = lerp(other.vel.y, constrain(other.vel.y, -defaultSpeed, defaultSpeed), 0.05);
           }
@@ -322,9 +177,9 @@ class Particle {
       this.color = lerpColor(this.baseColor, color(255,0,0), this.urgency);
     }
 
-    // ripple
+    // ripple (Safari-safe)
     if(!this.completed){
-      blendMode(ADD);
+      drawingContext.globalCompositeOperation = "lighter"; // safer than blendMode(ADD)
       noFill();
       stroke(this.color.levels[0], this.color.levels[1], this.color.levels[2], this.alpha);
       strokeWeight(2);
@@ -332,7 +187,7 @@ class Particle {
       this.r += this.g * (this.highStress?1.5:1);
       this.alpha = map(this.r,0,maxRipple,150,0);
       if(this.r>maxRipple){ this.r=0.1; this.alpha=150; }
-      blendMode(NORMAL);
+      drawingContext.globalCompositeOperation = "source-over";
     }
 
     // draw particle
@@ -342,7 +197,6 @@ class Particle {
     if(this.completed && this.pos.y<targetY){ this.pos.y+=this.fallSpeed; if(this.pos.y>targetY)this.pos.y=targetY; }
     ellipse(this.pos.x,this.pos.y,this.visualSize);
 
-    // show individual titles
     if((mobileView && millis()<this.showNameUntil) || this.highStress || this.urgency>0.8){
       fill((this.highStress||this.urgency>0.8)?"red":"white");
       textAlign(CENTER);
@@ -357,15 +211,6 @@ class Particle {
 // --- Setup ---
 function setup(){
   createCanvas(windowWidth, windowHeight);
-
-// --- Mobile zoom + improved touch interaction ---
-let canvasElt = document.querySelector("canvas");
-
-// Allow pinch zoom and page scroll
-canvasElt.style.touchAction = "manipulation"; // enables pinch-zoom and panning
-
-// Ensure the canvas resizes properly
-canvasElt.addEventListener("gesturestart", (e) => e.preventDefault());
 
   background(0);
   let startX = 150, startY = 150, spacingX = 250, spacingY = 250;
@@ -406,22 +251,9 @@ canvasElt.addEventListener("gesturestart", (e) => e.preventDefault());
   document.getElementById("particlesCreated").style.color="lime"; 
   document.getElementById("urgencyColor").style.color="lime";
 
-  document.getElementById("toggleTextBtn").addEventListener("click",()=>{
-    showCupText=!showCupText;
-    document.getElementById("checklist").style.display=showCupText?"block":"none";
-    document.getElementById("toggleTextBtn").innerText = showCupText?"Hide Cup Titles & Deadlines":"Show Cup Titles & Deadlines";
-  });
-
-  document.getElementById("toggleMobileBtn").addEventListener("click",()=>{
-    mobileView=!mobileView;
-    cups.forEach(cup=>cup.particles.forEach(p=>p.setSizes()));
-    document.getElementById("toggleMobileBtn").innerText = mobileView?"Disable Mobile View":"Enable Mobile View";
-  });
-
-  document.getElementById("toggleSubtaskBtn").addEventListener("click",()=>{
-    showSubtaskTitles=!showSubtaskTitles;
-    document.getElementById("toggleSubtaskBtn").innerText = showSubtaskTitles?"Hide Subtask Titles":"Show Subtask Titles";
-  });
+  document.getElementById("toggleTextBtn").addEventListener("click",()=>{ showCupText=!showCupText; document.getElementById("checklist").style.display=showCupText?"block":"none"; document.getElementById("toggleTextBtn").innerText = showCupText?"Hide Cup Titles & Deadlines":"Show Cup Titles & Deadlines"; });
+  document.getElementById("toggleMobileBtn").addEventListener("click",()=>{ mobileView=!mobileView; cups.forEach(cup=>cup.particles.forEach(p=>p.setSizes())); document.getElementById("toggleMobileBtn").innerText = mobileView?"Disable Mobile View":"Enable Mobile View"; });
+  document.getElementById("toggleSubtaskBtn").addEventListener("click",()=>{ showSubtaskTitles=!showSubtaskTitles; document.getElementById("toggleSubtaskBtn").innerText = showSubtaskTitles?"Hide Subtask Titles":"Show Subtask Titles"; });
 }
 
 // --- Draw ---
@@ -456,13 +288,13 @@ function touchEnded(){
 
 // --- Mouse ---
 function mousePressed(){
+  if(touches.length > 0) return; // prevent conflict with touch
   for(let cup of cups){
     for(let p of cup.particles){
       if(dist(mouseX,mouseY,p.pos.x,p.pos.y)<p.touchSize/2){ p.completed=true; saveCompletedState(); }
     }
   }
 }
-
 
 function mousePressedRight(e){
   e.preventDefault();
@@ -474,6 +306,11 @@ function mousePressedRight(e){
   return false;
 }
 document.addEventListener("contextmenu", mousePressedRight);
+
+// --- Window Resize ---
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 </script>
 </body>
 </html>
