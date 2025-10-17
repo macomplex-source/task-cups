@@ -34,6 +34,131 @@
   #patternSelector select { width: 100%; padding: 8px; background: #222; color: #fff; border: 1px solid #0a5; border-radius: 5px; font-size: 14px; cursor: pointer; }
   #patternSelector select:hover { background: #333; }
   
+  #taskManager { 
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  background: rgba(0,0,0,0.95); 
+  padding: 30px; 
+  border-radius: 15px; 
+  border: 2px solid #0a5; 
+  max-width: 600px; 
+  width: 90%; 
+  max-height: 80vh; 
+  overflow-y: auto; 
+  display: none; 
+  z-index: 200;
+  box-shadow: 0 10px 50px rgba(0,255,150,0.3);
+}
+#taskManager h2 { margin: 0 0 20px 0; color: #0f8; text-align: center; }
+#taskManager input { 
+  width: 100%; 
+  padding: 12px; 
+  margin: 10px 0; 
+  background: #1a1a1a; 
+  border: 1px solid #0a5; 
+  border-radius: 8px; 
+  color: #fff; 
+  font-size: 14px;
+  box-sizing: border-box;
+}
+#taskManager input:focus { 
+  outline: none; 
+  border-color: #0f8; 
+  box-shadow: 0 0 10px rgba(0,255,150,0.2);
+}
+#taskManager label { 
+  display: block; 
+  color: #0f8; 
+  font-size: 13px; 
+  font-weight: bold; 
+  margin: 15px 0 5px 0; 
+}
+#taskManager .btn-group { 
+  display: flex; 
+  gap: 10px; 
+  margin-top: 20px; 
+  justify-content: space-between;
+}
+#taskManager .btn-primary { 
+  background: linear-gradient(135deg, #0a5, #0f8); 
+  flex: 1;
+}
+#taskManager .btn-primary:hover { background: linear-gradient(135deg, #0c7, #0fa); }
+#taskManager .btn-secondary { background: #444; }
+#taskManager .btn-secondary:hover { background: #555; }
+.subtask-list { 
+  background: #0a0a0a; 
+  padding: 15px; 
+  border-radius: 8px; 
+  margin: 10px 0;
+  border: 1px solid #333;
+}
+.subtask-item { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  margin: 8px 0; 
+  padding: 8px;
+  background: #1a1a1a;
+  border-radius: 5px;
+}
+.subtask-item input { margin: 0; padding: 8px; flex: 1; }
+.subtask-item button { 
+  background: #d33; 
+  padding: 6px 12px; 
+  border-radius: 5px; 
+  white-space: nowrap;
+}
+.subtask-item button:hover { background: #e44; }
+.add-subtask-btn { 
+  background: #0a5; 
+  width: 100%; 
+  margin-top: 10px;
+}
+.add-subtask-btn:hover { background: #0c7; }
+.task-list { 
+  margin: 20px 0; 
+  max-height: 300px; 
+  overflow-y: auto;
+}
+.task-card { 
+  background: #1a1a1a; 
+  padding: 15px; 
+  margin: 10px 0; 
+  border-radius: 8px; 
+  border: 1px solid #333;
+  transition: all 0.3s ease;
+}
+.task-card:hover { 
+  border-color: #0a5; 
+  box-shadow: 0 5px 20px rgba(0,255,150,0.2);
+}
+.task-card h4 { margin: 0 0 10px 0; color: #0f8; }
+.task-card .task-meta { 
+  font-size: 12px; 
+  color: #888; 
+  margin: 5px 0;
+}
+.task-card .task-actions { 
+  display: flex; 
+  gap: 10px; 
+  margin-top: 10px;
+}
+.task-card button { padding: 6px 12px; font-size: 12px; }
+.overlay { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0,0,0,0.7); 
+  display: none; 
+  z-index: 199;
+  backdrop-filter: blur(5px);
+}
+
   @media (max-width: 768px) {
     .button-group { flex-direction: column; align-items: flex-end; }
     #legend { font-size: 12px; padding: 10px; }
@@ -89,7 +214,39 @@
   </div>
 </div>
 
+<div class="overlay" id="overlay"></div>
+
+<div id="taskManager">
+  <h2 id="managerTitle">Task Manager</h2>
+  
+  <div id="taskForm" style="display: none;">
+    <label>Task Title</label>
+    <input type="text" id="taskTitle" placeholder="e.g., Complete Project Report $50">
+    
+    <label>Deadline</label>
+    <input type="datetime-local" id="taskDeadline">
+    
+    <label>Subtasks</label>
+    <div class="subtask-list" id="subtaskList"></div>
+    <button class="btn add-subtask-btn" id="addSubtaskBtn">+ Add Subtask</button>
+    
+    <div class="btn-group">
+      <button class="btn btn-primary" id="saveTaskBtn">Save Task</button>
+      <button class="btn btn-secondary" id="cancelTaskBtn">Cancel</button>
+    </div>
+  </div>
+  
+  <div id="taskListView">
+    <button class="btn btn-primary" id="newTaskBtn" style="width: 100%; margin-bottom: 20px;">+ New Task</button>
+    <div class="task-list" id="taskList"></div>
+    <div class="btn-group" style="margin-top: 20px;">
+      <button class="btn btn-secondary" id="closeManagerBtn">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="button-group">
+  <button class="btn" id="manageTasksBtn">📋 Manage Tasks</button>
   <button class="btn" id="toggleTextBtn">Show Titles</button>
   <button class="btn" id="toggleMobileBtn">Mobile View</button>
   <button class="btn" id="toggleSubtaskBtn">Show Subtasks</button>
@@ -112,23 +269,329 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
 <script>
-let cups=[];let maxRipple=60;let showCupText=false;let mobileView=false;let showSubtaskTitles=true;let soundEnabled=true;let touchStartTime=0;let longPressDuration=500;let tappedParticle=null;let draggedCup=null;let dragOffset=null;let pseudoCompleteMode=false;let audioContext=null;let totalGoal=10000;let firstCompletionTime=null;let motionPattern='random';
-let mainTasks=[{title:"Employees Arrived On Time",deadline:"2025-10-12T15:00:00",subtasks:["H @10am","Baljit @ 10am","Navjot @ 10:30am","Harjinder @ 11am","Angie @ 11:30am","Isaiah @ 12pm","Ty @ 12pm","Brianna @3pm","Dupinder @ 3pm","Fardin @ 3:30pm","Navjot @ 4pm","Angie @ 4:15pm"]},{title:"Parties Are Signing In",deadline:"2025-10-12T15:00:00",subtasks:["Brooklynne @ 3pm"]},{title:"Parties Have Their Pizzas",deadline:"2025-10-12T15:00:00",subtasks:["Brooklynne @ 4:30pm"]},{title:"Today's E-mails $70",deadline:"2025-10-13T06:59:59",subtasks:["Understand the most recent Messages through repetition","Open Gmail, Drive, and Calendar","Download any neccessary files from Drive","Draft e-mail","Send off 1","Start: Ask Marsh about any questions for the rest of them","Send off 2nd","Send off any since Friday","Get rid of all fruit flies","Find a way to feel confident about the car being in the driveway for the next 12 hours","Shower"]},{title:"Do Car Related Work",deadline:"2025-10-13T23:59:59",subtasks:["Start: 04:30am Sunrise","Call Doctor","Find Service Ontario e-mail","Find Doctor's e-mail","Give Doctor a call by 3:35pm","Send e-mail from Service Ontario to Doctor","Follow Driver Medical Review Online Steps","Complete Driver Medical Review Online Steps","Reopen Service Ontario e-mail","Launch Driver Form","Understand 12-page document from August 11th from 'Suspend' pdf","Where do you need to submit the pin code 3DDAR73DDAR93czbg7?","How to use the call number 101897987?","May need to request another pin","Complete the 'Suspend' form but why if there is also other forms with pins required?","Review Facts Sheet"]},{title:"Earn $10,000",deadline:"2025-10-31T18:00:00",subtasks:["Start: Brainstorm Outline of the current roadmap","Design new implementaton to show dollar signs earned every two hours and how it affects end goal","Aiming for the Hyundai Tiburon '08 V6"]},{title:"GMC GlobeLife Client Story",deadline:"2025-10-13T20:00:00",subtasks:["Start: Define the process in a way you can understand it - a monologue","Transfer some pictures to external storage","Get Adobe"]},{title:"Clean Room",deadline:"2025-10-12T22:35:00",subtasks:["Grab the yellow cleaner","Spritz desk - mainly area with sticky jam","wipe clean"]},{title:"Pick up Liam on Time",deadline:"2025-10-13T09:30:00",subtasks:["Let Liam know pick-up is around 10am","Clean Van","Make the drive"]},{title:"What To Eat Tonight",deadline:"2025-10-13T03:00:00",subtasks:["Peanut butter sandwich","Jam sandwich","PB & J","McDonald's for fuel during mechanic top-up"]},{title:"Other",deadline:"2025-11-13T03:00:00",subtasks:["Fold clothes currently in drawer","Make some sort of display for how the space underneath your laptop is presented","Recognize that all of these things I don't like doing are valid","it's the difference between copy/paste and copy/copy/copy/windows key + paste","Sweep laundry room floor",
+  let cups=[];
+  let maxRipple=60;
+  let showCupText=false; 
+  let mobileView=false;
+  let showSubtaskTitles=true;
+  let soundEnabled=true;
+  let touchStartTime=0;
+  let longPressDuration=500;
+  let tappedParticle=null;
+let draggedCup=null;
+let dragOffset=null;
+let pseudoCompleteMode=false;
+let audioContext=null;let totalGoal=10000;
+let firstCompletionTime=null;
+let motionPattern='random';
+let editingTaskIndex=-1;
+  let subtaskInputs=[];
+let i = 1800;
+  let ii = 4000;
 
-"Get rid of all of the fruit flies in the room","Clean closet"]},{title:"Feel Prepared For Tomorrow",deadline:"2025-10-13T04:30:00",subtasks:["Today's e-mails are primed","Driveway is cleaned up","Vehicle is backed into driveway","brush teeth"]},{title:"Go To Sleep",deadline:"2025-10-14T02:30:00",subtasks:["Let the mechanic take over"]},{title:"Work Officially Starts $25",deadline:"2025-10-13T10:00:00",subtasks:["Clothes are in good College Pro Money Maker Condition","Clothes are folded","Starting at first job on time","First chunk"]},{title:"SECOND HOURS CHUNK $25",deadline:"2025-10-13T12:00:00",subtasks:["Food is ready","Starting at second job on time","Second chunk"]},{title:"THIRD HOURS CHUNK $50",deadline:"2025-10-13T14:00:00",subtasks:["Dropped off everyone","Head to Ridgeway","Third chunk"]},{title:"FIRST HOURS CHUNK $40",deadline:"2025-10-14T18:00:00",subtasks:["Place fruit fly traps in Aerosports","Clean out van"]}];
+let mainTasks=[{title:"Employees Arrived On Time",deadline:"2025-10-12T15:00:00",subtasks:["H @10am","Baljit @ 10am","Navjot @ 10:30am","Harjinder @ 11am","Angie @ 11:30am","Isaiah @ 12pm","Ty @ 12pm","Brianna @3pm","Dupinder @ 3pm","Fardin @ 3:30pm","Navjot @ 4pm","Angie @ 4:15pm"]},{title:"Parties Are Signing In",deadline:"2025-10-12T15:00:00",subtasks:["Brooklynne @ 3pm"]},{title:"Parties Have Their Pizzas",deadline:"2025-10-12T15:00:00",subtasks:["Brooklynne @ 4:30pm"]},{title:"Today's E-mails $70",deadline:"2025-10-13T06:59:59",subtasks:["Understand the most recent Messages through repetition","Open Gmail, Drive, and Calendar","Download any neccessary files from Drive","Draft e-mail","Send off 1","Start: Ask Marsh about any questions for the rest of them","Send off 2nd","Send off any since Friday","Get rid of all fruit flies","Find a way to feel confident about the car being in the driveway for the next 12 hours","Shower"]},
+     {title:"Do Car Related Work",deadline:"2025-10-14T19:59:59",subtasks:[
+"Call Doctor","Complete Driver Medical Review Online Steps",
+"Understand 12-page document from August 11th from 'Suspend' pdf",
+"pin code 3DDAR73DDAR93czbg7","Call number 101897987","New pin code acquired"
+]},
+{title:"Earn $10,000",deadline:"2025-10-31T18:00:00",subtasks:["Start: Brainstorm Outline of the current roadmap","Design new implementaton to show dollar signs earned every two hours and how it affects end goal","Aiming for the Hyundai Tiburon '08 V6"]},{title:"GMC GlobeLife Client Story",deadline:"2025-10-13T20:00:00",subtasks:["Start: Define the process in a way you can understand it - a monologue","Transfer some pictures to external storage","Get Adobe"]},{title:"Clean Room",deadline:"2025-10-12T22:35:00",subtasks:["Grab the yellow cleaner","Spritz desk - mainly area with sticky jam","wipe clean"]},{title:"Pick up Liam on Time",deadline:"2025-10-13T09:30:00",subtasks:["Let Liam know pick-up is around 10am","Clean Van","Make the drive"]},{title:"What To Eat Tonight",deadline:"2025-10-13T03:00:00",subtasks:["Peanut butter sandwich","Jam sandwich","PB & J","McDonald's for fuel during mechanic top-up"]},{title:"Other",deadline:"2025-11-13T03:00:00",subtasks:["Fold clothes currently in drawer","Make some sort of display for how the space underneath your laptop is presented","Recognize that all of these things I don't like doing are valid","it's the difference between copy/paste and copy/copy/copy/windows key + paste","Sweep laundry room floor",
+
+"Get rid of all of the fruit flies in the room","Clean closet"]},{title:"Feel Prepared For Tomorrow",deadline:"2025-10-13T04:30:00",subtasks:["Today's e-mails are primed","Driveway is cleaned up","Vehicle is backed into driveway","brush teeth"]},{title:"Go To Sleep",deadline:"2025-10-14T02:30:00",subtasks:["Let the mechanic take over"]},{title:"Work Officially Starts $25",deadline:"2025-10-13T10:00:00",subtasks:["Clothes are in good College Pro Money Maker Condition","Clothes are folded","Starting at first job on time","First chunk"]},{title:"SECOND HOURS CHUNK $25",deadline:"2025-10-13T12:00:00",subtasks:["Food is ready","Starting at second job on time","Second chunk"]},{title:"THIRD HOURS CHUNK $50",deadline:"2025-10-13T14:00:00",subtasks:["Dropped off everyone","Head to Ridgeway","Third chunk"]},
+    {title:"FIRST HOURS CHUNK $40",deadline:"2025-10-14T23:59:59",subtasks:[
+     "Start: Head to Aerosports",
+     "Place fruit fly traps in Aerosports",
+     "Clean out van", 
+     "Check over e-mails that need to be sent today",
+     "Send any e-mails that are necessary",
+     "Tell Marsh your hours"
+    ]},
+    {title:"Make It To Boxing Event",deadline:"2025-10-25T18:00:00",subtasks:[
+    "Have a look at poster"
+    ]},
+];
+
+
 function playCompleteSound(){if(!soundEnabled||!audioContext)return;const osc=audioContext.createOscillator();const gain=audioContext.createGain();osc.connect(gain);gain.connect(audioContext.destination);osc.frequency.setValueAtTime(800,audioContext.currentTime);osc.frequency.exponentialRampToValueAtTime(1200,audioContext.currentTime+0.1);gain.gain.setValueAtTime(0.3,audioContext.currentTime);gain.gain.exponentialRampToValueAtTime(0.01,audioContext.currentTime+0.1);osc.start(audioContext.currentTime);osc.stop(audioContext.currentTime+0.1);}
 function playUncompleteSound(){if(!soundEnabled||!audioContext)return;const osc=audioContext.createOscillator();const gain=audioContext.createGain();osc.connect(gain);gain.connect(audioContext.destination);osc.frequency.setValueAtTime(600,audioContext.currentTime);osc.frequency.exponentialRampToValueAtTime(300,audioContext.currentTime+0.1);gain.gain.setValueAtTime(0.2,audioContext.currentTime);gain.gain.exponentialRampToValueAtTime(0.01,audioContext.currentTime+0.1);osc.start(audioContext.currentTime);osc.stop(audioContext.currentTime+0.1);}
 function extractCashValue(title){let match=title.match(/\$(\d+(?:\.\d{2})?)/);return match?parseFloat(match[1]):0;}
 function updateCashTracker(){let totalEarned=0;let cashTasksComplete=0;let cashTasksTotal=0;for(let cup of cups){let cashValue=extractCashValue(cup.title);if(cashValue>0){cashTasksTotal++;let progress=cup.getProgress();if(progress.completed===progress.total&&progress.total>0){totalEarned+=cashValue;cashTasksComplete++;if(!firstCompletionTime)firstCompletionTime=new Date();}}}let remaining=totalGoal-totalEarned;let percent=((totalEarned/totalGoal)*100).toFixed(1);document.getElementById('cashEarned').innerText=totalEarned.toFixed(2);document.getElementById('cashRemaining').innerText=remaining.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});document.getElementById('cashPercent').innerText=percent;document.getElementById('cashProgressBar').style.width=percent+'%';document.getElementById('cashTasksComplete').innerText=cashTasksComplete;document.getElementById('cashTasksTotal').innerText=cashTasksTotal;let now=new Date();let endOfMonth=new Date(2025,9,31,23,59,59);let daysRemaining=Math.ceil((endOfMonth-now)/(1000*60*60*24));if(daysRemaining>0){let dailyTarget=remaining/daysRemaining;document.getElementById('dailyTarget').innerText=dailyTarget.toFixed(2);}}
 function loadCompletedState(){let saved=localStorage.getItem('completedParticles');return saved?JSON.parse(saved):[];}
-function saveCompletedState(){let completed=[];for(let cup of cups)completed.push(cup.particles.map(p=>p.completed));localStorage.setItem('completedParticles',JSON.stringify(completed));updateCashTracker();}
-function loadCupPositions(){let saved=localStorage.getItem('cupPositions');return saved?JSON.parse(saved):null;}
+function saveCompletedState(){
+  let completed=[];
+  for(let cup of cups)completed.push(cup.particles.map(p=>p.completed));
+  localStorage.setItem('completedParticles',JSON.stringify(completed));
+  updateCashTracker();
+}
+function saveTasks(){
+  let tasksData=mainTasks.map(t=>({title:t.title,deadline:t.deadline,subtasks:t.subtasks}));
+  localStorage.setItem('mainTasks',JSON.stringify(tasksData));
+}
+
+function loadTasks(){
+  let saved=localStorage.getItem('mainTasks');
+  if(saved){
+    try{
+      let parsed=JSON.parse(saved);
+      mainTasks=parsed;
+    }catch(e){
+      console.error('Error loading tasks:',e);
+    }
+  }
+}
+
+function openTaskManager(){
+  document.getElementById('overlay').style.display='block';
+  document.getElementById('taskManager').style.display='block';
+  showTaskList();
+}
+
+function closeTaskManager(){
+  document.getElementById('overlay').style.display='none';
+  document.getElementById('taskManager').style.display='none';
+  document.getElementById('taskForm').style.display='none';
+  document.getElementById('taskListView').style.display='block';
+}
+
+function showTaskList(){
+  document.getElementById('taskForm').style.display='none';
+  document.getElementById('taskListView').style.display='block';
+  document.getElementById('managerTitle').innerText='Task Manager';
+  let taskList=document.getElementById('taskList');
+  taskList.innerHTML='';
+  mainTasks.forEach((task,index)=>{
+    let card=document.createElement('div');
+    card.className='task-card';
+    let deadline=new Date(task.deadline);
+    let cup=cups[index];
+    let progress=cup?cup.getProgress():{completed:0,total:task.subtasks.length};
+    card.innerHTML=`
+      <h4>${task.title}</h4>
+      <div class="task-meta">📅 ${deadline.toLocaleString()}</div>
+      <div class="task-meta">✅ ${progress.completed}/${progress.total} subtasks complete</div>
+      <div class="task-actions">
+        <button class="btn btn-secondary edit-btn" data-index="${index}">Edit</button>
+        <button class="btn btn-secondary delete-btn" data-index="${index}">Delete</button>
+      </div>
+    `;
+    taskList.appendChild(card);
+  });
+}
+
+function showTaskForm(index=-1){
+  editingTaskIndex=index;
+  document.getElementById('taskListView').style.display='none';
+  document.getElementById('taskForm').style.display='block';
+  document.getElementById('managerTitle').innerText=index>=0?'Edit Task':'New Task';
+  if(index>=0){
+    let task=mainTasks[index];
+    document.getElementById('taskTitle').value=task.title;
+    let deadline=new Date(task.deadline);
+    document.getElementById('taskDeadline').value=deadline.toISOString().slice(0,16);
+    subtaskInputs=task.subtasks.map(s=>s);
+  }else{
+    document.getElementById('taskTitle').value='';
+    document.getElementById('taskDeadline').value='';
+    subtaskInputs=[''];
+  }
+  renderSubtasks();
+}
+
+function renderSubtasks(){
+  let container=document.getElementById('subtaskList');
+  container.innerHTML='';
+  subtaskInputs.forEach((value,index)=>{
+    let item=document.createElement('div');
+    item.className='subtask-item';
+    item.innerHTML=`
+      <input type="text" value="${value}" placeholder="Subtask ${index+1}" data-index="${index}">
+      <button class="btn" data-index="${index}">Remove</button>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function saveTask(){
+  let title=document.getElementById('taskTitle').value.trim();
+  let deadlineStr=document.getElementById('taskDeadline').value;
+  if(!title||!deadlineStr){
+    alert('Please fill in task title and deadline');
+    return;
+  }
+  let subtasks=subtaskInputs.filter(s=>s.trim()!=='');
+  if(subtasks.length===0){
+    alert('Please add at least one subtask');
+    return;
+  }
+  let taskData={title,deadline:deadlineStr,subtasks};
+  if(editingTaskIndex>=0){
+    mainTasks[editingTaskIndex]=taskData;
+    let cup=cups[editingTaskIndex];
+    cup.title=title;
+    cup.deadline=new Date(deadlineStr);
+    cup.deadlineTotal=cup.deadline-new Date();
+    let oldParticles=cup.particles.map(p=>({completed:p.completed,name:p.name}));
+    cup.particles=[];
+    subtasks.forEach((name,idx)=>{
+      let oldP=oldParticles.find(p=>p.name===name);
+      let completed=oldP?oldP.completed:false;
+      cup.addParticle(name,completed,false);
+    });
+    saveCompletedState();
+  }else{
+    mainTasks.push(taskData);
+    recreateAllCups();
+  }
+  saveTasks();
+  closeTaskManager();
+}
+
+function deleteTask(index){
+  if(confirm('Delete this task? This cannot be undone.')){
+    mainTasks.splice(index,1);
+    recreateAllCups();
+    saveTasks();
+    showTaskList();
+  }
+}
+
+function recreateAllCups(){
+  let completedState=loadCompletedState();
+  let savedPositions=loadCupPositions();
+  cups=[];
+  let startX=150,startY=150,spacingX=250,spacingY=300,cupsPerRow=3;
+  let cupColors=[color(255,128,0),color(0,200,255),color(255,0,255),color(128,0,255),color(25,100,255),color(0,255,128)];
+  for(let i=0;i<mainTasks.length;i++){
+    let t=mainTasks[i];
+    let col=i%cupsPerRow;
+    let row=Math.floor(i/cupsPerRow);
+    let x=savedPositions&&savedPositions[i]?savedPositions[i].x:startX+col*spacingX;
+    let y=savedPositions&&savedPositions[i]?savedPositions[i].y:startY+row*spacingY;
+    let cup=new Cup(x,y,150,150,t.title,t.deadline,cupColors[i%cupColors.length],i);
+    t.subtasks.forEach((taskName,idx)=>{
+      let completed=completedState[i]?completedState[i][idx]:false;
+      let highStress=false;
+      if(taskName.includes("*high stress*")){
+        highStress=true;
+        taskName=taskName.split("*")[0];
+      }
+      cup.addParticle(taskName,completed,highStress);
+    });
+    cups.push(cup);
+  }
+  for(let cup of cups){
+    let completed=cup.particles.filter(p=>p.completed);
+    completed.forEach(p=>{
+      p.pos=createVector(cup.pos.x+cup.w/2,cup.pos.y+cup.h+35);
+      p.target=p.pos.copy();
+    });
+  }
+  updateCashTracker();
+}
+function loadCupPositions(){
+  let saved=localStorage.getItem('cupPositions');
+  return saved?JSON.parse(saved):null;
+  }
 function saveCupPositions(){let positions=cups.map(c=>({x:c.pos.x,y:c.pos.y}));localStorage.setItem('cupPositions',JSON.stringify(positions));}
 function exportProgress(){let exportData={timestamp:new Date().toISOString(),tasks:[]};cups.forEach(cup=>{let completed=cup.particles.filter(p=>p.completed).length;let total=cup.particles.length;let taskData={title:cup.title,deadline:cup.deadline.toISOString(),progress:`${completed}/${total}`,percentage:((completed/total)*100).toFixed(1)+'%',subtasks:cup.particles.map(p=>({name:p.name,completed:p.completed,highStress:p.highStress}))};exportData.tasks.push(taskData);});const dataStr=JSON.stringify(exportData,null,2);const dataBlob=new Blob([dataStr],{type:'application/json'});const url=URL.createObjectURL(dataBlob);const link=document.createElement('a');link.href=url;link.download=`task-cups-progress-${new Date().toISOString().split('T')[0]}.json`;link.click();URL.revokeObjectURL(url);}
 function togglePseudoComplete(){pseudoCompleteMode=!pseudoCompleteMode;for(let cup of cups){cup.particles.forEach((p,i)=>{if(pseudoCompleteMode){p.originalPos=p.pos.copy();p.originalCompleted=p.completed;p.pseudoTarget=createVector(cup.pos.x+cup.w/2,cup.pos.y+cup.h+35);}else{if(p.originalPos){p.pos=p.originalPos.copy();p.originalPos=null;}p.pseudoTarget=null;p.vel=createVector(random(-1.2,1.2),random(-1.2,1.2));p.vel.limit(p.maxSpeed);}});}let btn=document.getElementById("pseudoCompleteBtn");btn.innerText=pseudoCompleteMode?"Release All":"Pseudo-Complete All";btn.classList.toggle("active",pseudoCompleteMode);}
 class Cup{constructor(x,y,w,h,title,deadline,color,index){this.pos=createVector(x,y);this.w=w;this.h=h;this.title=title;this.deadline=new Date(deadline);this.color=color;this.index=index;this.particles=[];this.deadlineTotal=this.deadline-new Date();this.currentTitleIndex=0;this.titleFade=0;this.titleDirection=1;this.titleSpeed=2;this.isDragging=false;this.collisionOffset=0;this.lastCollisionCheck=0;this.cashValue=extractCashValue(title);}addParticle(name,completed=false,highStress=false){let particle=new Particle(random(this.pos.x,this.pos.x+this.w),random(this.pos.y,this.pos.y+this.h),name,this,completed,highStress);this.particles.push(particle);}getProgress(){let completed=this.particles.filter(p=>p.completed).length;return{completed,total:this.particles.length};}getTimeRemaining(){let now=new Date();let remaining=this.deadline-now;if(remaining<0)return"OVERDUE";let days=Math.floor(remaining/(1000*60*60*24));let hours=Math.floor((remaining%(1000*60*60*24))/(1000*60*60));let minutes=Math.floor((remaining%(1000*60*60))/(1000*60));if(days>0)return`${days}d ${hours}h`;if(hours>0)return`${hours}h ${minutes}m`;return`${minutes}m`;}isMouseOver(){return mouseX>this.pos.x&&mouseX<this.pos.x+this.w&&mouseY>this.pos.y&&mouseY<this.pos.y+this.h;}checkVerticalCollision(textX,textY,textStr){textSize(16);let textW=textWidth(textStr);let textH=20;let padding=5;for(let otherCup of cups){if(otherCup===this)continue;if(this.index<=otherCup.index)continue;if(!showSubtaskTitles||otherCup.particles.length===0)continue;let otherVisibleParticles=pseudoCompleteMode?otherCup.particles:otherCup.particles.filter(p=>!p.highStress);if(otherVisibleParticles.length===0)continue;let otherP=otherVisibleParticles[otherCup.currentTitleIndex%otherVisibleParticles.length];let otherTextX=otherP.pos.x;let otherTextY=otherP.pos.y-25;let otherTextW=textWidth(otherP.name);let textLeft=textX-textW/2-padding;let textRight=textX+textW/2+padding;let textTop=textY-textH;let textBottom=textY+5;let otherLeft=otherTextX-otherTextW/2-padding;let otherRight=otherTextX+otherTextW/2+padding;let otherTop=otherTextY-textH;let otherBottom=otherTextY+5;if(textRight>otherLeft&&textLeft<otherRight&&textBottom>otherTop&&textTop<otherBottom)return 30;}return 0;}update(){let subtaskToRender=null;if(showSubtaskTitles&&this.particles.length>0){let visibleParticles=pseudoCompleteMode?this.particles:this.particles.filter(p=>!p.highStress);if(visibleParticles.length>0){let p=visibleParticles[this.currentTitleIndex%visibleParticles.length];this.titleFade+=this.titleDirection*this.titleSpeed;if(this.titleFade>=255){this.titleFade=255;this.titleDirection=-1;}else if(this.titleFade<=0){this.titleFade=0;this.titleDirection=1;this.currentTitleIndex=(this.currentTitleIndex+1)%visibleParticles.length;}subtaskToRender={particle:p,alpha:this.titleFade};}}for(let p of this.particles)p.update();let progress=this.getProgress();let progressPct=progress.total>0?progress.completed/progress.total:0;let barWidth=this.w-20;let barHeight=8;let barX=this.pos.x+10;let barY=this.pos.y-35;fill(40);noStroke();rect(barX,barY,barWidth,barHeight,4);fill(lerpColor(color(255,100,100),color(100,255,100),progressPct));rect(barX,barY,barWidth*progressPct,barHeight,4);fill(255);textAlign(CENTER);textSize(12);text(`${progress.completed}/${progress.total}`,this.pos.x+this.w/2,barY-5);let timeStr=this.getTimeRemaining();fill(timeStr==="OVERDUE"?color(255,50,50):color(150,150,255));textSize(11);text(timeStr,this.pos.x+this.w/2,this.pos.y+this.h+25);if(this.cashValue>0){let cupComplete=progress.completed===progress.total&&progress.total>0;fill(cupComplete?color(0,255,100):color(255,200,0));textSize(14);textAlign(CENTER);text('$'+this.cashValue.toFixed(2),this.pos.x+this.w/2,this.pos.y+this.h+40);if(!cupComplete){noFill();stroke(255,200,0,150);strokeWeight(2);rect(this.pos.x-5,this.pos.y-5,this.w+10,this.h+10,8);noStroke();}}if(subtaskToRender){let p=subtaskToRender.particle;let textX=p.pos.x;let textY=p.pos.y-25;let currentFrame=frameCount;if(currentFrame-this.lastCollisionCheck>60){this.collisionOffset=this.checkVerticalCollision(textX,textY,p.name);this.lastCollisionCheck=currentFrame;}let finalY=textY+this.collisionOffset;fill(255,subtaskToRender.alpha);textAlign(CENTER);textSize(16);text(p.name,textX,finalY);}if(showCupText){fill(255);textAlign(CENTER);textSize(windowWidth<600?18:14);text(this.title,this.pos.x+this.w/2,this.pos.y-50);text("Deadline: "+this.deadline.toLocaleString(),this.pos.x+this.w/2,this.pos.y+this.h+40);}}}
-class Particle{constructor(x,y,name,cup,completed=false,highStress=false){this.pos=createVector(x,y);this.vel=createVector(random(-1.2,1.2),random(-1.2,1.2));this.maxSpeed=0.5;this.r=0.1;this.g=random(0.5,1);this.alpha=150;this.name=name;this.cup=cup;this.completed=completed;this.highStress=highStress;this.urgency=0;this.showNameUntil=0;this.hovered=false;this.hoverAlpha=0;this.target=this.pos.copy();this.fallSpeed=2;this.pseudoTarget=null;this.originalPos=null;this.originalCompleted=false;this.baseColor=highStress?color(255,0,0):cup.color;this.vel.limit(this.maxSpeed);this.setSizes();this.patternTime=random(1000);this.patternOffset=random(TWO_PI);this.centerX=cup.pos.x+cup.w/2;this.centerY=cup.pos.y+cup.h/2;this.radius=min(cup.w,cup.h)/2.5;this.spiralAngle=random(TWO_PI);this.snakeSegment=0;}setSizes(){if(mobileView||windowWidth<600){this.visualSize=24;this.touchSize=48;}else{this.visualSize=12;this.touchSize=12;}}updatePatternMotion(){let now=new Date();let deadlinePassed=this.cup.deadline-now<0;if(deadlinePassed||this.completed||this.cup.isDragging||pseudoCompleteMode)return;this.patternTime+=0.02;this.centerX=this.cup.pos.x+this.cup.w/2;this.centerY=this.cup.pos.y+this.cup.h/2;this.radius=min(this.cup.w,this.cup.h)/2.5;let newX=this.pos.x;let newY=this.pos.y;if(motionPattern==='lotus'){let petalCount=8;let petalAngle=(this.patternTime+this.patternOffset)%TWO_PI;let petalRadius=this.radius*abs(sin(petalCount*petalAngle/2));newX=this.centerX+petalRadius*cos(petalAngle);newY=this.centerY+petalRadius*sin(petalAngle);}else if(motionPattern==='yinyang'){let angle=(this.patternTime+this.patternOffset)%TWO_PI;let side=sin(angle)>0?1:-1;let smallRadius=this.radius/2;let centerOffset=smallRadius*side;let smallCenterX=this.centerX;let smallCenterY=this.centerY+centerOffset;newX=smallCenterX+smallRadius*cos(angle*2);newY=smallCenterY+smallRadius*sin(angle*2);}else if(motionPattern==='snake'){let segments=this.cup.particles.filter(p=>!p.completed).length;let index=this.cup.particles.filter(p=>!p.completed).indexOf(this);if(index>=0){let waveLength=this.cup.w*0.8;let amplitude=this.cup.h*0.3;let progress=(this.patternTime+index*0.3)%1;newX=this.cup.pos.x+this.cup.w*0.1+waveLength*progress;newY=this.centerY+amplitude*sin(progress*TWO_PI*2);}}else if(motionPattern==='spiral'){this.spiralAngle+=0.03;let spiralRadius=this.radius*0.3+this.radius*0.6*((this.spiralAngle%(TWO_PI*2))/(TWO_PI*2));newX=this.centerX+spiralRadius*cos(this.spiralAngle);newY=this.centerY+spiralRadius*sin(this.spiralAngle);}else if(motionPattern==='orbit'){let angle=(this.patternTime+this.patternOffset)%TWO_PI;let orbitRadius=this.radius*0.8;newX=this.centerX+orbitRadius*cos(angle);newY=this.centerY+orbitRadius*sin(angle);}else{return;}this.pos.x=lerp(this.pos.x,newX,0.05);this.pos.y=lerp(this.pos.y,newY,0.05);}update(){if(pseudoCompleteMode&&this.pseudoTarget){this.pos.lerp(this.pseudoTarget,0.1);}else if(!this.completed&&!this.cup.isDragging){if(motionPattern==='random'){this.pos.add(this.vel);}else{this.updatePatternMotion();}}else if(!this.cup.isDragging){this.pos.lerp(this.target,0.1);}if(!pseudoCompleteMode&&motionPattern==='random'){if(this.pos.x<this.cup.pos.x){this.pos.x=this.cup.pos.x;this.vel.x*=-1;}if(this.pos.x>this.cup.pos.x+this.cup.w){this.pos.x=this.cup.pos.x+this.cup.w;this.vel.x*=-1;}if(this.pos.y<this.cup.pos.y){this.pos.y=this.cup.pos.y;this.vel.y*=-1;}if(this.pos.y>this.cup.pos.y+this.cup.h){this.pos.y=this.cup.pos.y+this.cup.h;this.vel.y*=-1;}}if(!this.completed&&!pseudoCompleteMode){let now=new Date();let remaining=this.cup.deadline-now;let sourceUrgency=remaining<=0?1:constrain(1-remaining/this.cup.deadlineTotal,0,1);this.urgency+=(sourceUrgency-this.urgency)*0.02;for(let other of this.cup.particles){if(!other.completed&&other!==this&&dist(this.pos.x,this.pos.y,other.pos.x,other.pos.y)<50){other.urgency+=(this.urgency-other.urgency)*0.01;other.urgency=constrain(other.urgency,0,1);}}this.color=lerpColor(this.baseColor,color(255,0,0),this.urgency);}if(!this.completed&&!pseudoCompleteMode){blendMode(ADD);noFill();for(let i=0;i<3;i++){let offset=i*(maxRipple/3);let ringRadius=(this.r+offset)%maxRipple;let ringAlpha=map(ringRadius,0,maxRipple,180,0)*(1-i*0.3);stroke(this.color.levels[0],this.color.levels[1],this.color.levels[2],ringAlpha);strokeWeight(2);ellipse(this.pos.x,this.pos.y,ringRadius*2);}this.r+=this.g*(this.highStress?1.5:1);this.alpha=map(this.r,0,maxRipple,150,0);if(this.r>maxRipple){this.r=0.1;this.alpha=150;}blendMode(NORMAL);}noStroke();let displayColor=(this.completed||pseudoCompleteMode)?"green":this.color;fill(displayColor);ellipse(this.pos.x,this.pos.y,this.visualSize);this.hovered=dist(mouseX,mouseY,this.pos.x,this.pos.y)<this.visualSize/2;this.hoverAlpha=lerp(this.hoverAlpha,this.hovered?255:0,0.08);if(this.hoverAlpha>1){fill(255,this.hoverAlpha);textAlign(CENTER);textSize(16);text(this.name,this.pos.x,this.pos.y-25);}if((mobileView&&millis()<this.showNameUntil)||this.highStress||this.urgency>0.8){fill((this.highStress||this.urgency>0.8)?"red":"white");textAlign(CENTER);textSize(16);text(this.name,this.pos.x,this.pos.y-25);}this.vel.limit(this.maxSpeed);}complete(){this.completed=true;playCompleteSound();let completed=this.cup.particles.filter(p=>p.completed);completed.forEach((p,i)=>{let spacing=25;p.target=createVector(this.cup.pos.x+this.cup.w/2,this.cup.pos.y+this.cup.h+35+(i*spacing));});saveCompletedState();}uncomplete(){this.completed=false;this.urgency=0;playUncompleteSound();saveCompletedState();}}
-function setup(){pixelDensity(1);frameRate(60);let canvasHeight=max(windowHeight,1800);createCanvas(windowWidth,canvasHeight);background(0);let startX=150,startY=150,spacingX=250,spacingY=300,cupsPerRow=3;let completedState=loadCompletedState();let savedPositions=loadCupPositions();let cupColors=[color(255,128,0),color(0,200,255),color(255,0,255),color(128,0,255),color(25,100,255),color(0,255,128)];for(let i=0;i<mainTasks.length;i++){let t=mainTasks[i];let col=i%cupsPerRow;let row=Math.floor(i/cupsPerRow);let x=savedPositions&&savedPositions[i]?savedPositions[i].x:startX+col*spacingX;let y=savedPositions&&savedPositions[i]?savedPositions[i].y:startY+row*spacingY;let cup=new Cup(x,y,150,150,t.title,t.deadline,cupColors[i%cupColors.length],i);t.subtasks.forEach((taskName,idx)=>{let completed=completedState[i]?completedState[i][idx]:false;let highStress=false;if(taskName.includes("*high stress*")){highStress=true;taskName=taskName.split("*")[0];}cup.addParticle(taskName,completed,highStress);});cups.push(cup);}document.getElementById("cupsCreated").style.color="lime";document.getElementById("particlesCreated").style.color="lime";document.getElementById("urgencyColor").style.color="lime";for(let cup of cups){let completed=cup.particles.filter(p=>p.completed);completed.forEach(p=>{p.pos=createVector(cup.pos.x+cup.w/2,cup.pos.y+cup.h+35);p.target=p.pos.copy();});}updateCashTracker();document.getElementById("toggleTextBtn").addEventListener("click",()=>{showCupText=!showCupText;document.getElementById("checklist").style.display=showCupText?"block":"none";document.getElementById("toggleTextBtn").innerText=showCupText?"Hide Titles":"Show Titles";});document.getElementById("toggleMobileBtn").addEventListener("click",()=>{mobileView=!mobileView;cups.forEach(cup=>cup.particles.forEach(p=>p.setSizes()));document.getElementById("toggleMobileBtn").innerText=mobileView?"Desktop View":"Mobile View";});document.getElementById("toggleSubtaskBtn").addEventListener("click",()=>{showSubtaskTitles=!showSubtaskTitles;document.getElementById("toggleSubtaskBtn").innerText=showSubtaskTitles?"Hide Subtasks":"Show Subtasks";});document.getElementById("pseudoCompleteBtn").addEventListener("click",togglePseudoComplete);document.getElementById("toggleSoundBtn").addEventListener("click",()=>{soundEnabled=!soundEnabled;if(soundEnabled&&!audioContext){audioContext=new(window.AudioContext||window.webkitAudioContext)();}document.getElementById("toggleSoundBtn").innerText=soundEnabled?"Sound: ON":"Sound: OFF";});document.getElementById("exportBtn").addEventListener("click",exportProgress);document.getElementById("patternSelect").addEventListener("change",(e)=>{motionPattern=e.target.value;});}
+class Particle{
+  constructor(x,y,name,cup,completed=false,highStress=false){this.pos=createVector(x,y);
+  this.vel=createVector(random(-1.2,1.2),random(-1.2,1.2));
+  this.maxSpeed=0.5;this.r=0.1;this.g=random(0.5,1);
+  this.alpha=150;this.name=name;this.cup=cup;this.completed=completed;this.highStress=highStress;this.urgency=0;this.showNameUntil=0;
+  this.hovered=false;this.hoverAlpha=0;this.target=this.pos.copy();this.fallSpeed=2;this.pseudoTarget=null;this.originalPos=null;
+  this.originalCompleted=false;this.baseColor=highStress?color(255,0,0):cup.color;this.vel.limit(this.maxSpeed);this.setSizes();
+  this.patternTime=random(1000);this.patternOffset=random(TWO_PI);
+  this.centerX=cup.pos.x+cup.w/2;this.centerY=cup.pos.y+cup.h/2;
+  this.radius=min(cup.w,cup.h)/2.5;
+  this.spiralAngle=random(TWO_PI);
+  this.snakeSegment=0;
+}setSizes(){if(mobileView||windowWidth<600){this.visualSize=24;
+  this.touchSize=48;
+}else{
+  this.visualSize=12;this.touchSize=12;
+}
+}updatePatternMotion(){
+  let now=new Date();
+  let deadlinePassed=this.cup.deadline-now<0;
+  if(this.completed||this.cup.isDragging||pseudoCompleteMode)return;
+  this.patternTime+=0.02;
+  this.centerX=this.cup.pos.x+this.cup.w/2;
+  this.centerY=this.cup.pos.y+this.cup.h/2;
+  this.radius=min(this.cup.w,this.cup.h)/2.5;
+  let newX=this.pos.x;
+  let newY=this.pos.y;
+  if(motionPattern==='lotus'){let petalCount=8;let petalAngle=(this.patternTime+this.patternOffset)%TWO_PI;
+  let petalRadius=this.radius*abs(sin(petalCount*petalAngle/2));
+  newX=this.centerX+petalRadius*cos(petalAngle);
+  newY=this.centerY+petalRadius*sin(petalAngle);
+  }else if(motionPattern==='yinyang'){let angle=(this.patternTime+this.patternOffset)%TWO_PI;
+    let side=sin(angle)>0?1:-1;let smallRadius=this.radius/2;let centerOffset=smallRadius*side;
+    let smallCenterX=this.centerX;let smallCenterY=this.centerY+centerOffset;newX=smallCenterX+smallRadius*cos(angle*2);
+    newY=smallCenterY+smallRadius*sin(angle*2);
+  }else if(motionPattern==='snake'){let segments=this.cup.particles.filter(p=>!p.completed).length;let index=this.cup.particles.filter(p=>!p.completed).indexOf(this);if(index>=0){
+let waveLength=this.cup.w*0.8;let amplitude=this.cup.h*0.3;let progress=(this.patternTime+index*0.3)%1;newX=this.cup.pos.x+this.cup.w*0.1+waveLength*progress;newY=this.centerY+amplitude*sin(progress*TWO_PI*2);}}else if(motionPattern==='spiral'){this.spiralAngle+=0.03;let spiralRadius=this.radius*0.3+this.radius*0.6*((this.spiralAngle%(TWO_PI*2))/(TWO_PI*2));newX=this.centerX+spiralRadius*cos(this.spiralAngle);newY=this.centerY+spiralRadius*sin(this.spiralAngle);}else if(motionPattern==='orbit'){let angle=(this.patternTime+this.patternOffset)%TWO_PI;let orbitRadius=this.radius*0.8;newX=this.centerX+orbitRadius*cos(angle);newY=this.centerY+orbitRadius*sin(angle);}else{return;}this.pos.x=lerp(this.pos.x,newX,0.05);this.pos.y=lerp(this.pos.y,newY,0.05);
+}
+update(){
+if(pseudoCompleteMode&&this.pseudoTarget){
+this.pos.lerp(this.pseudoTarget,0.1);
+}else if(!this.completed&&!this.cup.isDragging){
+if(motionPattern==='random'){this.pos.add(this.vel);
+}else{this.updatePatternMotion();
+}}else if(!this.cup.isDragging){this.pos.lerp(this.target,0.1);
+}if(!pseudoCompleteMode&&motionPattern==='random'){if(this.pos.x<this.cup.pos.x){
+  this.pos.x=this.cup.pos.x;this.vel.x*=-1;}if(this.pos.x>this.cup.pos.x+this.cup.w){this.pos.x=this.cup.pos.x+this.cup.w;this.vel.x*=-1;
+}if(this.pos.y<this.cup.pos.y){this.pos.y=this.cup.pos.y;this.vel.y*=-1;}if(this.pos.y>this.cup.pos.y+this.cup.h){this.pos.y=this.cup.pos.y+this.cup.h;this.vel.y*=-1;}}if(!this.completed&&!pseudoCompleteMode){let now=new Date();let remaining=this.cup.deadline-now;let sourceUrgency=remaining<=0?1:constrain(1-remaining/this.cup.deadlineTotal,0,1);this.urgency+=(sourceUrgency-this.urgency)*0.02;for(let other of this.cup.particles){if(!other.completed&&other!==this&&dist(this.pos.x,this.pos.y,other.pos.x,other.pos.y)<50){other.urgency+=(this.urgency-other.urgency)*0.01;other.urgency=constrain(other.urgency,0,1);}}this.color=lerpColor(this.baseColor,color(255,0,0),this.urgency);}if(!this.completed&&!pseudoCompleteMode){blendMode(ADD);noFill();for(let i=0;i<3;i++){let offset=i*(maxRipple/3);let ringRadius=(this.r+offset)%maxRipple;let ringAlpha=map(ringRadius,0,maxRipple,180,0)*(1-i*0.3);stroke(this.color.levels[0],this.color.levels[1],this.color.levels[2],ringAlpha);strokeWeight(2);ellipse(this.pos.x,this.pos.y,ringRadius*2);}this.r+=this.g*(this.highStress?1.5:1);this.alpha=map(this.r,0,maxRipple,150,0);if(this.r>maxRipple){this.r=0.1;this.alpha=150;}blendMode(NORMAL);}noStroke();let displayColor=(this.completed||pseudoCompleteMode)?"green":this.color;fill(displayColor);ellipse(this.pos.x,this.pos.y,this.visualSize);this.hovered=dist(mouseX,mouseY,this.pos.x,this.pos.y)<this.visualSize/2;this.hoverAlpha=lerp(this.hoverAlpha,this.hovered?255:0,0.08);if(this.hoverAlpha>1){fill(255,this.hoverAlpha);textAlign(CENTER);textSize(16);text(this.name,this.pos.x,this.pos.y-25);}if((mobileView&&millis()<this.showNameUntil)||this.highStress||this.urgency>0.8){fill((this.highStress||this.urgency>0.8)?"red":"white");textAlign(CENTER);textSize(16);text(this.name,this.pos.x,this.pos.y-25);}this.vel.limit(this.maxSpeed);}complete(){this.completed=true;playCompleteSound();let completed=this.cup.particles.filter(p=>p.completed);completed.forEach((p,i)=>{let spacing=25;p.target=createVector(this.cup.pos.x+this.cup.w/2,this.cup.pos.y+this.cup.h+35+(i*spacing));});saveCompletedState();}uncomplete(){this.completed=false;this.urgency=0;playUncompleteSound();saveCompletedState();}}
+function setup(){
+  loadTasks();
+  pixelDensity(1);
+  frameRate(60);
+  let canvasHeight=max(windowHeight,1800);
+
+
+
+
+  createCanvas(windowWidth,i);
+
+
+
+
+  background(0);let startX=150,startY=150,spacingX=250,spacingY=300,cupsPerRow=3;let completedState=loadCompletedState();let savedPositions=loadCupPositions();let cupColors=[color(255,128,0),color(0,200,255),color(255,0,255),color(128,0,255),color(25,100,255),color(0,255,128)];for(let i=0;i<mainTasks.length;i++){let t=mainTasks[i];let col=i%cupsPerRow;let row=Math.floor(i/cupsPerRow);let x=savedPositions&&savedPositions[i]?savedPositions[i].x:startX+col*spacingX;let y=savedPositions&&savedPositions[i]?savedPositions[i].y:startY+row*spacingY;let cup=new Cup(x,y,150,150,t.title,t.deadline,cupColors[i%cupColors.length],i);t.subtasks.forEach((taskName,idx)=>{let completed=completedState[i]?completedState[i][idx]:false;let highStress=false;if(taskName.includes("*high stress*")){highStress=true;taskName=taskName.split("*")[0];}cup.addParticle(taskName,completed,highStress);});cups.push(cup);}document.getElementById(
+
+  "cupsCreated").style.color="lime";document.getElementById("particlesCreated").style.color="lime";document.getElementById("urgencyColor").style.color="lime";for(let cup of cups){let completed=cup.particles.filter(p=>p.completed);completed.forEach(p=>{p.pos=createVector(cup.pos.x+cup.w/2,cup.pos.y+cup.h+35);p.target=p.pos.copy();});}updateCashTracker();document.getElementById("manageTasksBtn").addEventListener("click",openTaskManager);
+document.getElementById("overlay").addEventListener("click",closeTaskManager);
+document.getElementById("closeManagerBtn").addEventListener("click",closeTaskManager);
+document.getElementById("cancelTaskBtn").addEventListener("click",closeTaskManager);
+document.getElementById("newTaskBtn").addEventListener("click",()=>showTaskForm(-1));
+document.getElementById("saveTaskBtn").addEventListener("click",saveTask);
+document.getElementById("addSubtaskBtn").addEventListener("click",()=>{
+  subtaskInputs.push('');
+  renderSubtasks();
+});
+document.getElementById("subtaskList").addEventListener("input",(e)=>{
+  if(e.target.tagName==='INPUT'){
+    let index=parseInt(e.target.getAttribute('data-index'));
+    subtaskInputs[index]=e.target.value;
+  }
+});
+document.getElementById("subtaskList").addEventListener("click",(e)=>{
+  if(e.target.tagName==='BUTTON'){
+    let index=parseInt(e.target.getAttribute('data-index'));
+    subtaskInputs.splice(index,1);
+    renderSubtasks();
+  }
+});
+document.getElementById("taskList").addEventListener("click",(e)=>{
+  if(e.target.classList.contains('edit-btn')){
+    let index=parseInt(e.target.getAttribute('data-index'));
+    showTaskForm(index);
+  }else if(e.target.classList.contains('delete-btn')){
+    let index=parseInt(e.target.getAttribute('data-index'));
+    deleteTask(index);
+  }
+});document.getElementById("toggleTextBtn").addEventListener("click",()=>{showCupText=!showCupText;document.getElementById("checklist").style.display=showCupText?"block":"none";document.getElementById("toggleTextBtn").innerText=showCupText?"Hide Titles":"Show Titles";});document.getElementById("toggleMobileBtn").addEventListener("click",()=>{mobileView=!mobileView;cups.forEach(cup=>cup.particles.forEach(p=>p.setSizes()));document.getElementById("toggleMobileBtn").innerText=mobileView?"Desktop View":"Mobile View";});document.getElementById("toggleSubtaskBtn").addEventListener("click",()=>{showSubtaskTitles=!showSubtaskTitles;document.getElementById("toggleSubtaskBtn").innerText=showSubtaskTitles?"Hide Subtasks":"Show Subtasks";});document.getElementById("pseudoCompleteBtn").addEventListener("click",togglePseudoComplete);document.getElementById("toggleSoundBtn").addEventListener("click",()=>{soundEnabled=!soundEnabled;if(soundEnabled&&!audioContext){audioContext=new(window.AudioContext||window.webkitAudioContext)();}document.getElementById("toggleSoundBtn").innerText=soundEnabled?"Sound: ON":"Sound: OFF";});document.getElementById("exportBtn").addEventListener("click",exportProgress);document.getElementById("patternSelect").addEventListener("change",(e)=>{motionPattern=e.target.value;});}
 function draw(){background(0,20);for(let cup of cups)cup.update();document.getElementById("animationRunning").style.color="lime";}
 function mousePressed(){if(mouseButton===LEFT){for(let cup of cups){for(let p of cup.particles){if(dist(mouseX,mouseY,p.pos.x,p.pos.y)<p.touchSize/2&&!p.completed){p.complete();return;}}}for(let cup of cups){if(cup.isMouseOver()){draggedCup=cup;draggedCup.isDragging=true;dragOffset=createVector(mouseX-cup.pos.x,mouseY-cup.pos.y);return;}}}}
 function mouseDragged(){if(draggedCup&&dragOffset){draggedCup.pos.x=mouseX-dragOffset.x;draggedCup.pos.y=mouseY-dragOffset.y;}}
